@@ -1,0 +1,22 @@
+{
+  "configs": {
+    "hebeho": "asdkjha",
+    "ecem": "seni çok seviyorum",
+    "myKey": "worlds",
+    "logalama": "hata",
+    "anArray": [
+      1,
+      2,
+      3
+    ],
+    "kele": 12312,
+    "nested": {
+      "array": [
+        "this",
+        "is",
+        "an",
+        "array"
+      ]
+    }
+  }
+}
