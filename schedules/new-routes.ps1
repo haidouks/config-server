@@ -2,21 +2,22 @@
     param($Event)
     $ErrorActionPreference = "Stop"
     $VerbosePreference = "Continue"
+    $fileName = "new-routes"
+    $routes = $null
     
-    $configs = $null
     Lock-PodeObject -Object $Event.Lockable {
-        $configs = Get-PodeState -Name routes
+        $routes = Get-PodeState -Name routes
     }
+    Write-Verbose -Message "$fileName __ Received routes from shared state:`n$($routes | out-string)"
 
-    foreach($config in $configs) {
-        "Creating route $($config.Keys) Value:$($config.Values)" | Out-PodeHost
-        Add-PodeRoute -Method Get -Path $config.Keys -ArgumentList $config.Values -ScriptBlock {
-            param($s,$value)
+    foreach($route in $routes) {
+        Add-PodeRoute -Method Get -Path $route -ArgumentList $route -ScriptBlock {
+            param($s,$key)
+            $value = $null
+            Lock-PodeObject -Object $s.Lockable {
+                $value = Get-PodeState -Name $key
+            }
             Write-PodeJsonResponse -Value @{value = $value}
         } -ErrorAction SilentlyContinue
     }
-    
-    "Removing unused routes" | Out-PodeHost  
-    "$(Get-PodeRoute -Method Get | out-string)" | Out-PodeHost
-
 }

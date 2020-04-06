@@ -2,7 +2,7 @@
 $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
 $VerbosePreference = "Continue"
-$env:PodePort ??= 8080
+$env:PodePort ??= 8085
 $env:ThreadCount ??= 10
 #endregion
 
@@ -12,10 +12,10 @@ $requiredModules = @(
     @{Name = "powershell-yaml"; Version = "0.4.1"}
 )
 
-#$requiredModules | ForEach-Object {
-#    Uninstall-Module -Name $_.Name -Force -AllVersions -ErrorAction SilentlyContinue
-#    Install-Module -Name $_.Name -RequiredVersion $_.Version -Force
-#}
+$requiredModules | ForEach-Object {
+    Uninstall-Module -Name $_.Name -Force -AllVersions -ErrorAction SilentlyContinue
+    Install-Module -Name $_.Name -RequiredVersion $_.Version -Force -Repository "ZT-PSGallery" -AllowClobber
+}
 #endregion
 
 Start-PodeServer -Threads $env:ThreadCount {
@@ -23,7 +23,7 @@ Start-PodeServer -Threads $env:ThreadCount {
     New-PodeLoggingMethod -Terminal | Enable-PodeErrorLogging
     New-PodeLoggingMethod -Terminal | Enable-PodeRequestLogging
     Restore-PodeState -Path './state.json'
-    Add-PodeEndpoint -Address * -Port $env:PodePort -Protocol Http
+    Add-PodeEndpoint -Address 10.75.8.57 -Port $env:PodePort -Protocol Http
     # Add-PodeSchedule -Name 'save-state' -Cron '@minutely' -ScriptBlock {
     #     param($e)
     #     #git clone https://github.com/haidouks/configs.git configurations 
@@ -39,7 +39,7 @@ Start-PodeServer -Threads $env:ThreadCount {
     #     Get-PodeState -Name 'test'| Out-String | Out-PodeHost
     #     "Saving kjhaskdad" | Out-PodeHost
     # }
-    Add-PodeSchedule -Name 'get-config' -Cron '@minutely' -FilePath ./schedules/clone.ps1
+    Add-PodeSchedule -Name 'get-config' -Cron '@minutely' -FilePath ./schedules/get-configs.ps1
     Add-PodeSchedule -Name 'get-routes' -Cron '@minutely' -FilePath ./schedules/get-routes.ps1
     Add-PodeSchedule -Name 'new-routes' -Cron '@minutely' -FilePath ./schedules/new-routes.ps1
     #    param($e)

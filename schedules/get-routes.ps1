@@ -2,6 +2,8 @@
     param($Event)
     $ErrorActionPreference = "Stop"
     $VerbosePreference = "Continue"
+    $fileName = "get-routes"
+    $stateFile = "./state.json"
     function Get-ConfigRoutes {
         [CmdletBinding()]
         param (
@@ -14,9 +16,9 @@
             $path = ""
         )
         if($hash.Keys -ge 1) {
-           foreach($key in $hash.Keys ) {    
-               Get-KeyHier -hash $hash."$key" -path "$path/$key"
-           }
+            foreach($key in $hash.Keys ) {    
+                Get-ConfigRoutes -hash $hash."$key" -path "$path/$key"
+            }
         }
         else {
             return @{$path=$hash}
@@ -27,20 +29,18 @@
     Lock-PodeObject -Object $Event.Lockable {
         $configs = Get-PodeState -Name configs
     }
-    Write-Verbose -Message "Received configs from shared state"
+    Write-Verbose -Message "$fileName __ Received configs from shared state:`n$($configs | out-string)"
     $routes = Get-ConfigRoutes -hash $configs
-
     Lock-PodeObject -Object $Event.Lockable {
-        Set-PodeState -Name routes -Value $routes | Out-Null
-        Save-PodeState -Path './state.json'
+        Set-PodeState -Name routes -Value $routes.Keys | Out-Null
+        Save-PodeState -Path $stateFile
     }
-
-    foreach($config in $configs) {
-        "Creating route $($config.Keys) Value:$($config.Values)" | Out-PodeHost
-        Add-PodeRoute -Method Get -Path $config.Keys -ArgumentList $config.Values -ScriptBlock {
-            param($s,$value)
-            Write-PodeJsonResponse -Value @{value = $value}
-    } -ErrorAction SilentlyContinue
+    foreach($route in $routes) {
+        Write-Verbose -Message "$fileName __ Saving route to shared state: $($route | out-string)"
+        Lock-PodeObject -Object $Event.Lockable {
+            Set-PodeState -Name $route.Keys -Value $route.Values | Out-Null
+            Save-PodeState -Path $stateFile
+        }
+    }
     
-}
 }
