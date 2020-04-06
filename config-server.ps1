@@ -23,7 +23,7 @@ Start-PodeServer -Threads $env:ThreadCount {
     New-PodeLoggingMethod -Terminal | Enable-PodeErrorLogging
     New-PodeLoggingMethod -Terminal | Enable-PodeRequestLogging
     Restore-PodeState -Path './state.json'
-    Add-PodeEndpoint -Address 10.75.8.57 -Port $env:PodePort -Protocol Http
+    Add-PodeEndpoint -Address * -Port $env:PodePort -Protocol Http
     # Add-PodeSchedule -Name 'save-state' -Cron '@minutely' -ScriptBlock {
     #     param($e)
     #     #git clone https://github.com/haidouks/configs.git configurations 
