@@ -1,7 +1,7 @@
 #region Set Parameters
 $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
-$VerbosePreference = "Continue"
+$VerbosePreference = "SilentlyContinue"
 $env:PodePort ??= 8085
 $env:ThreadCount ??= 10
 #endregion
@@ -14,7 +14,7 @@ $requiredModules = @(
 
 $requiredModules | ForEach-Object {
     Uninstall-Module -Name $_.Name -Force -AllVersions -ErrorAction SilentlyContinue
-    Install-Module -Name $_.Name -RequiredVersion $_.Version -Force -Repository "ZT-PSGallery" -AllowClobber
+    Install-Module -Name $_.Name -RequiredVersion $_.Version -Force -AllowClobber 
 }
 #endregion
 
@@ -28,8 +28,6 @@ Start-PodeServer -Threads $env:ThreadCount {
     Add-PodeSchedule -Name 'get-config' -Cron '@minutely' -FilePath ./schedules/get-configs.ps1
     Add-PodeSchedule -Name 'get-routes' -Cron '@minutely' -FilePath ./schedules/get-routes.ps1
     Add-PodeSchedule -Name 'new-routes' -Cron '@minutely' -FilePath ./schedules/new-routes.ps1
+    Add-PodeSchedule -Name 'remove-routes' -Cron '@minutely' -FilePath ./schedules/remove-routes.ps1
     
-    Add-PodeRoute -Method Get -Path '/ping' -ScriptBlock {
-        Write-PodeJsonResponse -Value @{Status = "Healthy"}
-    }
 }
