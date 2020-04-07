@@ -14,7 +14,7 @@ $requiredModules = @(
 
 $requiredModules | ForEach-Object {
     Uninstall-Module -Name $_.Name -Force -AllVersions -ErrorAction SilentlyContinue
-    Install-Module -Name $_.Name -RequiredVersion $_.Version -Force -AllowClobber 
+    Install-Module -Name $_.Name -RequiredVersion $_.Version -Force -AllowClobber
 }
 #endregion
 

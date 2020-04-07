@@ -7,7 +7,7 @@
         $stateFile = "./state.json"
 
         $repo = "https://github.com/haidouks/configs.git"
-        $configPath = "configurations/configs"
+        $configPath = Join-Path -Path (Get-PodeServerPath) -ChildPath "configs/sample"
 
         if(Test-Path $configPath) {
             Write-Verbose -Message "$fileName __ Starting to pull changes from $repo to: $configPath"
@@ -32,6 +32,7 @@
                 Set-PodeState -Name $configFile.Name -Value $configs | Out-Null
             }
         }
+
         Lock-PodeObject -Object $Event.Lockable {
             Save-PodeState -Path  $stateFile 
         }

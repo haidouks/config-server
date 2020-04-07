@@ -16,9 +16,12 @@
     if($null -ne $routes)
     {
         foreach($podeRoute in $podeRoutes) {
-            if($routes -notcontains $podeRoute -and $routes.split("/")[1] -ne "api") {
+            if($routes -notcontains $podeRoute) {
                 Write-Warning -Message "$fileName __ Removing $podeRoute from pode routes"
                 Remove-PodeRoute -Path $podeRoute -Method Get
+                Lock-PodeObject -Object $Event.Lockable {
+                    Remove-PodeState -Name $podeRoute -ErrorAction SilentlyContinue | Out-Null
+                }
             }
         }
     }
