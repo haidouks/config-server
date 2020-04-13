@@ -2,7 +2,7 @@
     param($Event)
     try {
         $ProgressPreference = "SilentlyContinue"
-        $VerbosePreference = "SilentlyContinue"
+        $VerbosePreference = "Continue"
         $fileName = "get-configs"
         $stateFile = "./state.json"
 
@@ -49,6 +49,7 @@
         Write-Verbose -Message "$fileName __ Saved state to $stateFile"
     }
     catch {
-        throw $_
+        $exception = $($PSItem | select-object * |Format-Custom -Property * -Depth 1 | Out-String)
+        Write-Warning -Message "$fileName __ $exception"
     }
 }
