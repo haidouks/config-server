@@ -2,7 +2,7 @@
     param($Event)
     try {
         $ProgressPreference = "SilentlyContinue"
-        $VerbosePreference = "Continue"
+        $VerbosePreference = "SilentlyContinue"
         $fileName = "get-configs"
         $stateFile = "./state.json"
 

@@ -41,8 +41,13 @@
                 $configs = Get-PodeState -Name $configFile
             }
             Write-Verbose -Message "$fileName __ Preparing routes for $configName"
-            $routes += Get-ConfigRoutes -hash $configs -path "/$configName"
-            
+            $newRoutes = Get-ConfigRoutes -hash $configs -path "/$configName"
+            foreach ($newRoute in $newRoutes) {
+                if($routes.Keys -notcontains $newRoute.Keys) {
+                    Write-Verbose -Message "$fileName __ Adding route $($newRoute | out-string)"
+                    $routes += $newRoute
+                }
+            }
         }
         Write-Verbose -Message "$fileName __ Saving all route paths to shared state"
         Lock-PodeObject -Object $Event.Lockable {
@@ -58,7 +63,8 @@
         }
     }
     catch {
-        throw $_
+        $exception = $($PSItem | select-object * |Format-Custom -Property * -Depth 1 | Out-String)
+        Write-Warning -Message "$fileName __ $exception"
     }
     
     
