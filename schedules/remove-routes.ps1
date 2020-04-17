@@ -1,8 +1,10 @@
 ﻿{
     param($Event)
+    
     $ErrorActionPreference = "Stop"
     $ProgressPreference = "SilentlyContinue"
-    $env:VerbosePreference ? ($VerbosePreference = $env:VerbosePreference) : ($VerbosePreference = "SilentlyContinue")
+    $VerbosePreference = $env:VerbosePreference ? $env:VerbosePreference : "SilentlyContinue"
+
     try {
         $fileName = "remove-routes"
         $routes = $null

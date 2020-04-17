@@ -1,10 +1,11 @@
 {
     param($Event)
     try {
+        
         $ProgressPreference = "SilentlyContinue"
-        $env:VerbosePreference ? ($VerbosePreference = $env:VerbosePreference) : ($VerbosePreference = "SilentlyContinue")
+        $VerbosePreference = $env:VerbosePreference ? $env:VerbosePreference : "SilentlyContinue"
+        
         $fileName = "get-repo"
-
         $env:repo ??= "https://github.com/haidouks/configs.git"
         $configPath = Join-Path -Path (Get-PodeServerPath) -ChildPath "configs"
 

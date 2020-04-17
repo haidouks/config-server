@@ -1,7 +1,8 @@
 #region Set Parameters
 $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
-$VerbosePreference = "SilentlyContinue"
+$VerbosePreference = $env:VerbosePreference ? $env:VerbosePreference : "SilentlyContinue"
+        
 $env:PodePort ??= 8085
 $env:ThreadCount ??= 10
 #endregion
