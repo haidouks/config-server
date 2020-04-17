@@ -2,7 +2,7 @@
     param($Event)
     $ErrorActionPreference = "Stop"
     $ProgressPreference = "SilentlyContinue"
-    $VerbosePreference = "SilentlyContinue"
+    $env:VerbosePreference ? ($VerbosePreference = $env:VerbosePreference) : ($VerbosePreference = "SilentlyContinue")
     $fileName = "get-routes"
     $stateFile = "./state.json"
     try {
@@ -31,7 +31,7 @@
         Lock-PodeObject -Object $Event.Lockable {
             $configFiles = Get-PodeState -Name "configFiles"
         }
-        $routes = $null
+        $routes = New-Object System.Collections.ArrayList
         foreach ($configFile in $configFiles) {
             $configName = $configFile.Split(".")[0]
             Write-Verbose -Message "$fileName __ Getting configs for $configFile"
@@ -45,7 +45,7 @@
             foreach ($newRoute in $newRoutes) {
                 if($routes.Keys -notcontains $newRoute.Keys) {
                     Write-Verbose -Message "$fileName __ Adding route $($newRoute | out-string)"
-                    $routes += $newRoute
+                    $null = $routes.Add($newRoute)
                 }
             }
         }

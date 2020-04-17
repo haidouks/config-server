@@ -2,28 +2,19 @@
     param($Event)
     try {
         $ProgressPreference = "SilentlyContinue"
-        $VerbosePreference = "SilentlyContinue"
+        $env:VerbosePreference ? ($VerbosePreference = $env:VerbosePreference) : ($VerbosePreference = "SilentlyContinue")
+        
         $fileName = "get-configs"
         $stateFile = "./state.json"
-
-        $repo = "https://github.com/haidouks/configs.git"
-        $configPath = Join-Path -Path (Get-PodeServerPath) -ChildPath "configs/sample"
-
-        if(Test-Path $configPath) {
-            Write-Verbose -Message "$fileName __ Starting to pull changes from $repo to: $configPath"
-            git -C $configPath pull
-        }
-        else {
-            Write-Verbose -Message "$fileName __ Starting to clone $repo to: $configPath"
-            git clone $repo $configPath
-        }
-
+        $configPath = Join-Path -Path (Get-PodeServerPath) -ChildPath "configs"
         $configFiles = Get-ChildItem -Path $configPath -Filter *.yaml | Select-Object Name,FullName
         $exConfigFiles = $null
+
         Lock-PodeObject -Object $Event.Lockable {
             $exConfigFiles = Get-PodeState -Name configFiles
             Set-PodeState -Name configFiles -Value $configFiles.Name | Out-Null
         }
+
         foreach($exConfigFile in $exConfigFiles) {
             if($configFiles.Name -notcontains $exConfigFile) {
                 Write-Warning -Message "$fileName __ Removing unused config state $exConfigFile"
@@ -34,7 +25,6 @@
         }
 
         foreach($configFile in $configFiles) {
-            
             $configs = $null
             $configs = Get-Content -Path $configFile.FullName -Raw | ConvertFrom-Yaml -AllDocuments
             Write-Verbose -Message "$fileName __ Setting shared state for $($configFile.Name):`n$($configs | out-string)"
