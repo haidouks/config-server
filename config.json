@@ -1,0 +1,14 @@
+{
+  "requiredModules": [
+    {
+      "Name": "pode",
+      "Version": "1.6.1",
+      "Repository": "PSGallery"
+    },
+    {
+      "Name": "powershell-yaml",
+      "Version": "0.4.1",
+      "Repository": "PSGallery"
+    }
+  ]
+}

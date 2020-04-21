@@ -5,17 +5,13 @@ $VerbosePreference = $env:VerbosePreference ? $env:VerbosePreference : "Silently
         
 $env:PodePort ??= 8085
 $env:ThreadCount ??= 10
+$config = Get-Content -Path .\config.json | ConvertFrom-Json
 #endregion
 
 #region Uninstall/Install Required Modules
-$requiredModules = @(
-    @{Name = "pode"; Version = "1.6.1"},
-    @{Name = "powershell-yaml"; Version = "0.4.1"}
-)
-
-$requiredModules | ForEach-Object {
+$config.requiredModules | ForEach-Object {
     Uninstall-Module -Name $_.Name -Force -AllVersions -ErrorAction SilentlyContinue
-    Install-Module -Name $_.Name -RequiredVersion $_.Version -Force -AllowClobber
+    Install-Module -Name $_.Name -RequiredVersion $_.Version -Force -AllowClobber -Repository $_.Repository
 }
 #endregion
 
