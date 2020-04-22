@@ -9,9 +9,12 @@ $config = Get-Content -Path .\config.json | ConvertFrom-Json
 #endregion
 
 #region Uninstall/Install Required Modules
-$config.requiredModules | ForEach-Object {
-    Uninstall-Module -Name $_.Name -Force -AllVersions -ErrorAction SilentlyContinue
-    Install-Module -Name $_.Name -RequiredVersion $_.Version -Force -AllowClobber -Repository $_.Repository
+ForEach ($module in $config.requiredModules) {
+    $existingModule = Get-Module -Name $module.Name -All | Where-Object{$_.Version -eq $module.Version}
+    if($null -eq $existingModule) {
+        Write-Verbose -Message "Installing module:$($module.Name) version:$($module.Version) from $($module.Repository)"
+        Install-Module -Name $module.Name -RequiredVersion $module.Version -Force -AllowClobber -Repository $module.Repository
+    }
 }
 #endregion
 
