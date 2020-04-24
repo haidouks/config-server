@@ -8,6 +8,9 @@ Actually it is up to you.  `schedules/get-repo.ps1` file is responsible from get
 
 But it is possible to add custom logic to get/sync yaml files or completely disabling and working on existing local yaml files by changing `schedules/get-repo.ps1`.
 
+![config-server](https://user-images.githubusercontent.com/23384662/80245529-8b05de00-8673-11ea-8142-018c7ee5c51f.png)
+
+
 ## Yaml file Format
 Assume that you have 2 yaml files `test1.yaml` and `test2.yaml`;
 
@@ -58,7 +61,7 @@ Install-Module -Name "pscache" -RequiredVersion 0.1.0 -Force -Scope CurrentUser
 
 #### Environment Variables
 Config server will use environment variables during server startup to configure itself. They are:
-* `repo`: Remote git repo address that config server will clone and pull periodically. Default: https://github.com/haidouks/config-server
+* `repo`: Remote git repo address that config server will clone and pull periodically. Default: https://github.com/haidouks/configs
 * `PodePort`: Port that will config server will be listening. Default: 8085
 * `ThreadCount`: Dedicated thread count for all routes. Default: 5
 * `VerbosePreference`: Enable verbose logging. Default: SilentlyContinue
