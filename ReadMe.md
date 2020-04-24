@@ -3,12 +3,24 @@
 ## What is Config Server?
 Config Server is a Cross-Platform key/value store which dynamically converts yaml files into rest services. 
 
+## How it works?
+
+1. Config server fetchs yaml files from git repo (or any remote)
+2. Hierarchically saves all keys in all yaml files to the state file. In case of restart or crash, first task of config server is reloading this file to cache. 
+3. Hierarchically caches each key and it's value. You should take care of cached objects because currently there is no capacity limitation or caching policy like LRU,MRU,etc. 
+4. Creates routes for each cached keys and each routes return cached values.
+5. If a new yaml file or key is added it will be remarked by config server and .
+6. If a yaml file or key is deleted, related routes will be deleted from cache and state file. Deleted routes will start to get http 404.
+
+>![config-server](https://user-images.githubusercontent.com/23384662/80245529-8b05de00-8673-11ea-8142-018c7ee5c51f.png)
+
+
+
 ## How to store Config Files?
 Actually it is up to you.  `schedules/get-repo.ps1` file is responsible from getting yamls from remote and by default, config server assumes that yaml files are kept in a git repository. 
 
 But it is possible to add custom logic to get/sync yaml files or completely disabling and working on existing local yaml files by changing `schedules/get-repo.ps1`.
 
-![config-server](https://user-images.githubusercontent.com/23384662/80245529-8b05de00-8673-11ea-8142-018c7ee5c51f.png)
 
 
 ## Yaml file Format
@@ -38,13 +50,10 @@ Config server will convert all keys in all yaml files to the following endpoints
 
 ## How to run?
 
-### Requirements
+### Prerequisites
+>There is no prerequisites for `cnsn/config-server` base image, all requirements are already installed inside docker image.
 
->If you use `cnsn/config-server` base image, all requirements are already installed inside this docker image.
-
->If you want to run config-server out side of containers, first thing you need is Powershell Core(>6.0). Then you need to install `git` and be able to reach repos defined in Powershell Gallery.
-
->When you start `config-server.ps1` for the first time, following modules will be installed from Powershell Gallery if they are not installed already:
+>If you want to run config-server out of container, first thing you need is Powershell Core (PS > 6.0). Also `git` should be installed and finally config-server should be able to reach repos defined in Powershell Gallery. When you start `config-server.ps1` for the first time, following modules will be installed from Powershell Gallery if they are not installed already:
 
 * Powershell-Yaml (Powershell Module)
 * Pode (Powershell Module)
