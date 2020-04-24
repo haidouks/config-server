@@ -12,7 +12,7 @@ $config = Get-Content -Path .\config.json | ConvertFrom-Json
 ForEach ($module in $config.requiredModules) {
     $existingModule = Get-Module -Name $module.Name -All -ListAvailable | Where-Object{$_.Version -eq $module.Version}
     if($null -eq $existingModule) {
-        Write-Verbose -Message "Installing module:$($module.Name) version:$($module.Version) from $($module.Repository)"
+        Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") Installing module:$($module.Name) version:$($module.Version) from $($module.Repository)"
         Install-Module -Name $module.Name -RequiredVersion $module.Version -Force -AllowClobber -AllowPrerelease -Repository $module.Repository -Scope CurrentUser
     }
 }

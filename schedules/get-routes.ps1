@@ -37,28 +37,28 @@
         $routes = New-Object System.Collections.ArrayList
         foreach ($configFile in $configFiles) {
             $configName = $configFile.Split(".")[0]
-            Write-Verbose -Message "$fileName __ Getting configs for $configFile"
+            Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Getting configs for $configFile"
             $configs = $null
 
             Lock-PodeObject -Object $Event.Lockable {
                 $configs = Get-PodeState -Name $configFile
             }
-            Write-Verbose -Message "$fileName __ Preparing routes for $configName"
+            Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Preparing routes for $configName"
             $newRoutes = Get-ConfigRoutes -hash $configs -path "/$configName"
             foreach ($newRoute in $newRoutes) {
                 if($routes.Keys -notcontains $newRoute.Keys) {
-                    Write-Verbose -Message "$fileName __ Adding route $($newRoute | out-string)"
+                    Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Adding route $($newRoute | out-string)"
                     $null = $routes.Add($newRoute)
                 }
             }
         }
-        Write-Verbose -Message "$fileName __ Saving all route paths to shared state"
+        Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Saving all route paths to shared state"
         Lock-PodeObject -Object $Event.Lockable {
             Set-PodeState -Name routes -Value $routes.Keys | Out-Null
             Save-PodeState -Path $stateFile
         }
         foreach($route in $routes) {
-            Write-Verbose -Message "$fileName __ Saving route to shared state: $($route | out-string)"
+            Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Saving route to shared state: $($route | out-string)"
             Lock-PodeObject -Object $Event.Lockable {
                 Set-PodeState -Name $route.Keys -Value $route.Values | Out-Null
                 Save-PodeState -Path $stateFile
@@ -67,7 +67,7 @@
     }
     catch {
         $exception = $($PSItem | select-object * |Format-Custom -Property * -Depth 1 | Out-String)
-        Write-Warning -Message "$fileName __ $exception"
+        Write-Warning -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ $exception"
     }
     
     

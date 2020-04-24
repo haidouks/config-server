@@ -11,10 +11,10 @@
         Lock-PodeObject -Object $Event.Lockable {
             $routes = Get-PodeState -Name routes
         }
-        Write-Verbose -Message "$fileName __ Received routes from shared state:`n$($routes | out-string)"
+        Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Received routes from shared state:`n$($routes | out-string)"
 
         $podeRoutes = (Get-PodeRoute).Path
-        Write-Verbose -Message "$fileName __ Received routes from Pode:`n$($podeRoutes | out-string)"
+        Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Received routes from Pode:`n$($podeRoutes | out-string)"
 
         foreach($route in $routes) {
             if($podeRoutes -notcontains $route) {
@@ -32,6 +32,6 @@
     }   
     catch {
         $exception = $($PSItem | select-object * |Format-Custom -Property * -Depth 1 | Out-String)
-        Write-Warning -Message "$fileName __ $exception"
+        Write-Warning -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ $exception"
     }
 }

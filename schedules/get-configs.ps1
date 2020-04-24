@@ -17,7 +17,7 @@
 
         foreach($exConfigFile in $exConfigFiles) {
             if($configFiles.Name -notcontains $exConfigFile) {
-                Write-Warning -Message "$fileName __ Removing unused config state $exConfigFile"
+                Write-Warning -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Removing unused config state $exConfigFile"
                 Lock-PodeObject -Object $Event.Lockable {
                     Remove-PodeState -Name $exConfigFile 
                 }
@@ -27,7 +27,7 @@
         foreach($configFile in $configFiles) {
             $configs = $null
             $configs = Get-Content -Path $configFile.FullName -Raw | ConvertFrom-Yaml -AllDocuments
-            Write-Verbose -Message "$fileName __ Setting shared state for $($configFile.Name):`n$($configs | out-string)"
+            Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Setting shared state for $($configFile.Name):`n$($configs | out-string)"
             Lock-PodeObject -Object $Event.Lockable {
                 Set-PodeState -Name $configFile.Name -Value $configs | Out-Null
             }
@@ -36,10 +36,10 @@
         Lock-PodeObject -Object $Event.Lockable {
             Save-PodeState -Path  $stateFile 
         }
-        Write-Verbose -Message "$fileName __ Saved state to $stateFile"
+        Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Saved state to $stateFile"
     }
     catch {
         $exception = $($PSItem | select-object * |Format-Custom -Property * -Depth 1 | Out-String)
-        Write-Warning -Message "$fileName __ $exception"
+        Write-Warning -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ $exception"
     }
 }
