@@ -28,7 +28,6 @@ Assume that you have 2 yaml files `test1.yaml` and `test2.yaml`;
 
 * test1.yaml
 ``` yaml
----
 nested:
   array:
   - this
