@@ -42,7 +42,7 @@
                             $value = Get-PodeState -Name $key
                         }
                         Write-PodeJsonResponse -Value @{value = $value}
-                    } -ErrorAction SilentlyContinue -Middleware (Get-PodeAuthMiddleware -Name $authType)
+                    } -ErrorAction SilentlyContinue -Middleware (Get-PodeAuthMiddleware -Name $authType -Sessionless)
                 }
                 else{
                     Add-PodeRoute -Method Get -Path $route -ArgumentList $route -ScriptBlock {
