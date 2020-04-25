@@ -5,7 +5,7 @@
     $env:VerbosePreference ? ($VerbosePreference = $env:VerbosePreference) : ($VerbosePreference = "SilentlyContinue")
     $fileName = "new-routes"
     $routes = $null
-    $env:enableAuthentation ??=$false
+    $env:enableAuthentation ??= $false
     $authenticatedRoutes = $null
 
     try {
@@ -33,7 +33,7 @@
                         }
                     }
                 }
-                Write-Verbose -Message "(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Adding route:$route with auth type:$authType"
+                Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Adding route:$route with auth type:$authType"
                 if($authType) {
                     Add-PodeRoute -Method Get -Path $route -ArgumentList $route -ScriptBlock {
                         param($s,$key)

@@ -74,6 +74,9 @@ Config server will use environment variables during server startup to configure 
 * `PodePort`: Port that will config server will be listening. Default: 8085
 * `ThreadCount`: Dedicated thread count for all routes. Default: 5
 * `VerbosePreference`: Enable verbose logging. Default: SilentlyContinue
+* `enableAuthentation`: Enable authentication. Default: False
+* `authenticatedRoutes`: List of routes that will be authenticated. Default: Null
+* `defaultAuthToken`: Bearer token for default authencation type. Default:QweAsdZxc123
 
 
 ### Examples
@@ -89,8 +92,16 @@ docker run -d -p 8085:8085 \
     -e repo=https://github.com/haidouks/configs \
     cnsn/config-server
 ```
+Example 3: Authenticate some routes
+``` Docker
+docker run -d -p 8085:8085 \
+    -e repo=https://github.com/haidouks/configs \
+    -e enableAuthentation=true \
+    -e authenticatedRoutes=test/*:DefaultAuth \
+    -e defaultAuthToken=Qweasd123 \
+    cnsn/config-server
+```
 
 ## Roadmap
-* Bearer Authencation for routes
 * Just in time synchronizer
 * Configure cache capacity and policy

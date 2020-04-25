@@ -26,6 +26,7 @@ Start-PodeServer -Threads $env:ThreadCount {
     Restore-PodeState -Path './state.json'
     Add-PodeEndpoint -Address * -Port $env:PodePort -Protocol Http
     
+    Add-PodeSchedule -Name 'set-auth' -Cron '@minutely' -Limit 1 -FilePath ./schedules/set-auth.ps1
     Add-PodeSchedule -Name 'get-repo' -Cron '@minutely'  -FilePath ./schedules/get-repo.ps1
     Add-PodeSchedule -Name 'get-configs' -Cron '@minutely' -FilePath ./schedules/get-configs.ps1
     Add-PodeSchedule -Name 'get-routes' -Cron '@minutely'  -FilePath ./schedules/get-routes.ps1
