@@ -5,8 +5,15 @@
     $env:VerbosePreference ? ($VerbosePreference = $env:VerbosePreference) : ($VerbosePreference = "SilentlyContinue")
     $fileName = "new-routes"
     $routes = $null
+    $env:enableAuthentation ??=$false
+    $authenticatedRoutes = $null
+
     try {
-        
+        if($env:enableAuthentation) {
+            if($null -ne $env:authenticatedRoutes) {
+                $authenticatedRoutes = $env:authenticatedRoutes.split(",")
+            }
+        }   
     
         Lock-PodeObject -Object $Event.Lockable {
             $routes = Get-PodeState -Name routes
@@ -15,17 +22,39 @@
 
         $podeRoutes = (Get-PodeRoute).Path
         Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Received routes from Pode:`n$($podeRoutes | out-string)"
-
         foreach($route in $routes) {
             if($podeRoutes -notcontains $route) {
-                Add-PodeRoute -Method Get -Path $route -ArgumentList $route -ScriptBlock {
-                    param($s,$key)
-                    $value = $null
-                    Lock-PodeObject -Object $s.Lockable { 
-                        $value = Get-PodeState -Name $key
+                $authType = $null
+                if($env:enableAuthentation) {
+                    foreach($regex in $authenticatedRoutes) {
+                        if($route -match $regex.split(":")[0]) {
+                            $authType = $regex.split(":")[1]
+                            $authType ??= "DefaultAuth"
+                        }
                     }
-                    Write-PodeJsonResponse -Value @{value = $value}
-                } -ErrorAction SilentlyContinue
+                }
+                Write-Verbose -Message "(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Adding route:$route with auth type:$authType"
+                if($authType) {
+                    Add-PodeRoute -Method Get -Path $route -ArgumentList $route -ScriptBlock {
+                        param($s,$key)
+                        $value = $null
+                        Lock-PodeObject -Object $s.Lockable { 
+                            $value = Get-PodeState -Name $key
+                        }
+                        Write-PodeJsonResponse -Value @{value = $value}
+                    } -ErrorAction SilentlyContinue -Middleware (Get-PodeAuthMiddleware -Name $authType)
+                }
+                else{
+                    Add-PodeRoute -Method Get -Path $route -ArgumentList $route -ScriptBlock {
+                        param($s,$key)
+                        $value = $null
+                        Lock-PodeObject -Object $s.Lockable { 
+                            $value = Get-PodeState -Name $key
+                        }
+                        Write-PodeJsonResponse -Value @{value = $value}
+                    } -ErrorAction SilentlyContinue
+                }
+                
             }
         }
 
