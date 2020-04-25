@@ -4,7 +4,7 @@
     $ProgressPreference = "SilentlyContinue"
     $env:VerbosePreference ? ($VerbosePreference = $env:VerbosePreference) : ($VerbosePreference = "SilentlyContinue")
     $fileName = "set-auth"
-    $env:defaultAuthToken = "QweAsdZxc123"
+    $env:defaultAuthToken ??= "QweAsdZxc123"
     try {
         New-PodeAuthType -Bearer | Add-PodeAuth -Name 'DefaultAuth' -ScriptBlock {
             param($token)
