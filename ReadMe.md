@@ -68,7 +68,7 @@ Install-Module -Name "pscache" -RequiredVersion 0.1.0 -Force -Scope CurrentUser
 ```
 
 
-#### Environment Variables
+### Environment Variables
 Config server will use environment variables during server startup to configure itself. They are:
 * `repo`: Remote git repo address that config server will clone and pull periodically. Default: https://github.com/haidouks/configs
 * `PodePort`: Port that will config server will be listening. Default: 8085
@@ -76,7 +76,7 @@ Config server will use environment variables during server startup to configure 
 * `VerbosePreference`: Enable verbose logging. Default: SilentlyContinue
 
 
-#### Examples
+### Examples
 Example 1: Quick start
 ``` Docker
 docker run -d -p 8085:8085 cnsn/config-server:latest
@@ -89,3 +89,8 @@ docker run -d -p 8085:8085 \
     -e repo=https://github.com/haidouks/configs \
     cnsn/config-server
 ```
+
+## Roadmap
+* Bearer Authencation for routes
+* Just in time synchronizer
+* Configure cache capacity and policy
