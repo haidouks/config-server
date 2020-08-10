@@ -17,9 +17,7 @@
             git -C $repoPath pull 2>/dev/null
             $exitCode = $LASTEXITCODE
             if ($exitCode) {
-                $exception = $_
-                Write-Warning "$(Get-Date -Format "yyyyMMddHHmmssfff") Unable to pull repo: $($env:repo), exit code: $exitCode" 
-                Throw $exception
+                Throw "$(Get-Date -Format "yyyyMMddHHmmssfff") Unable to pull repo: $($env:repo), exit code: $exitCode" 
             }
         }
         else {
@@ -36,7 +34,7 @@
         Invoke-PodeSchedule -Name 'get-configs'
     }
     catch {
-        $exception = $($PSItem | select-object * |Format-Custom -Property * -Depth 1 | Out-String)
+        $exception = $($PSItem | select-object * | Format-Custom -Property * -Depth 1 | Out-String)
         Write-Warning -Message "$fileName __ $exception"
     }
 }
