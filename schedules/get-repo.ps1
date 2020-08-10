@@ -13,14 +13,14 @@
         
 
         if(Test-Path $repoPath) {
-            Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Starting to pull changes from $env:repo to: $configPath"
-            git -C $configPath pull
+            Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Starting to pull changes from $env:repo to: $repoPath"
+            git -C $repoPath pull
             if ($LASTEXITCODE) { 
                 Throw "$(Get-Date -Format "yyyyMMddHHmmssfff") Unable to pull repo: $($env:repo), exit code: $LASTEXITCODE" 
             }
         }
         else {
-            Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Starting to clone $env:repo to: $configPath"
+            Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Starting to clone $env:repo to: $repoPath"
             git clone $env:repo $repoPath
             if ($LASTEXITCODE) { 
                 Throw "$(Get-Date -Format "yyyyMMddHHmmssfff") Unable to clone repo: $($env:repo), exit code: $LASTEXITCODE" 
