@@ -25,6 +25,9 @@
             if ($LASTEXITCODE) { 
                 Throw "$(Get-Date -Format "yyyyMMddHHmmssfff") Unable to clone repo: $($env:repo), exit code: $LASTEXITCODE" 
             }
+            Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Waiting 15 seconds after first clone"
+            Start-Sleep -Seconds 15
+
         }
         Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Saved repo to $configPath"
         Invoke-PodeSchedule -Name 'get-configs'
