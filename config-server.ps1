@@ -23,14 +23,19 @@ Start-PodeServer -Threads $env:ThreadCount {
     
     New-PodeLoggingMethod -Terminal | Enable-PodeErrorLogging
     New-PodeLoggingMethod -Terminal | Enable-PodeRequestLogging
-    Restore-PodeState -Path './state.json'
+    
     Add-PodeEndpoint -Address * -Port $env:PodePort -Protocol Http
+    
+    $configPath = Join-Path -Path (Get-PodeServerPath) -ChildPath "configs"
+    (Test-Path -Path $configPath) ? "" : (New-Item -Path $configPath -ItemType Directory)
+    $stateFile = Join-Path -Path $configPath -ChildPath "state.json"
+    Restore-PodeState -Path $stateFile
     
     Add-PodeSchedule -Name 'set-auth' -Cron '@minutely' -Limit 1 -FilePath ./schedules/set-auth.ps1
     Add-PodeSchedule -Name 'get-repo' -Cron '@minutely'  -FilePath ./schedules/get-repo.ps1
-    Add-PodeSchedule -Name 'get-configs' -Cron '@hourly' -FilePath ./schedules/get-configs.ps1
-    Add-PodeSchedule -Name 'get-routes' -Cron '@hourly'  -FilePath ./schedules/get-routes.ps1
-    Add-PodeSchedule -Name 'new-routes' -Cron '@hourly' -FilePath ./schedules/new-routes.ps1
-    Add-PodeSchedule -Name 'remove-routes' -Cron '@hourly' -FilePath ./schedules/remove-routes.ps1
+    Add-PodeSchedule -Name 'get-configs' -Cron '@hourly' -Limit 1 -FilePath ./schedules/get-configs.ps1
+    Add-PodeSchedule -Name 'get-routes' -Cron '@hourly' -Limit 1 -FilePath ./schedules/get-routes.ps1
+    Add-PodeSchedule -Name 'new-routes' -Cron '@hourly' -Limit 1 -FilePath ./schedules/new-routes.ps1
+    Add-PodeSchedule -Name 'remove-routes' -Cron '@hourly' -Limit 1 -FilePath ./schedules/remove-routes.ps1
     
 }
