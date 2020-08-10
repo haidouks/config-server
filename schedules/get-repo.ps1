@@ -14,7 +14,8 @@
 
         if(Test-Path $repoPath) {
             Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Starting to pull changes from $env:repo to: $repoPath"
-            git -C $repoPath pull 2>/dev/null
+            $output = git -C $repoPath pull 2>&1
+            Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Pulled repo: $output"
             $exitCode = $LASTEXITCODE
             if ($exitCode) {
                 Throw "$(Get-Date -Format "yyyyMMddHHmmssfff") Unable to pull repo: $($env:repo), exit code: $exitCode" 
