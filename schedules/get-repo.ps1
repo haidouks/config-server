@@ -8,8 +8,11 @@
         $fileName = "get-repo"
         $env:repo ??= "https://github.com/haidouks/configs.git"
         $configPath = Join-Path -Path (Get-PodeServerPath) -ChildPath "configs"
+        (Test-Path -Path $configPath) ? "" : (New-Item -Path $configPath -ItemType Directory)
+        $repoPath = Join-Path -Path $configPath -ChildPath "repo"
+        
 
-        if(Test-Path $configPath) {
+        if(Test-Path $repoPath) {
             Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Starting to pull changes from $env:repo to: $configPath"
             git -C $configPath pull
             if ($LASTEXITCODE) { 
@@ -18,7 +21,7 @@
         }
         else {
             Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Starting to clone $env:repo to: $configPath"
-            git clone $env:repo $configPath
+            git clone $env:repo $repoPath
             if ($LASTEXITCODE) { 
                 Throw "$(Get-Date -Format "yyyyMMddHHmmssfff") Unable to clone repo: $($env:repo), exit code: $LASTEXITCODE" 
             }
