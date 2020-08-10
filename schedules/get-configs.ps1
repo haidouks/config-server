@@ -7,7 +7,10 @@
         $fileName = "get-configs"
         $stateFile = "./state.json"
         $configPath = Join-Path -Path (Get-PodeServerPath) -ChildPath "configs"
-        $configFiles = Get-ChildItem -Path $configPath -Filter *.yaml | Select-Object Name,FullName
+        $repoPath = Join-Path -Path $configPath -ChildPath "repo"
+        
+        (Test-Path -Path $configPath) ? "" : (New-Item -Path $configPath -ItemType Directory)
+        $configFiles = Get-ChildItem -Path $repoPath -Filter *.yaml | Select-Object Name,FullName
         $exConfigFiles = $null
 
         Lock-PodeObject -Object $Event.Lockable {
