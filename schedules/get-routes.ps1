@@ -65,6 +65,7 @@
                 Save-PodeState -Path $stateFile
             }
         }
+        Invoke-PodeSchedule -Name 'new-routes'
     }
     catch {
         $exception = $($PSItem | select-object * |Format-Custom -Property * -Depth 1 | Out-String)
