@@ -28,9 +28,9 @@ Start-PodeServer -Threads $env:ThreadCount {
     
     Add-PodeSchedule -Name 'set-auth' -Cron '@minutely' -Limit 1 -FilePath ./schedules/set-auth.ps1
     Add-PodeSchedule -Name 'get-repo' -Cron '@minutely'  -FilePath ./schedules/get-repo.ps1
-    Add-PodeSchedule -Name 'get-configs' -Cron '@minutely' -FilePath ./schedules/get-configs.ps1
-    Add-PodeSchedule -Name 'get-routes' -Cron '@minutely'  -FilePath ./schedules/get-routes.ps1
-    Add-PodeSchedule -Name 'new-routes' -Cron '@minutely' -FilePath ./schedules/new-routes.ps1
-    Add-PodeSchedule -Name 'remove-routes' -Cron '@minutely' -FilePath ./schedules/remove-routes.ps1
+    Add-PodeSchedule -Name 'get-configs' -Cron '@hourly' -FilePath ./schedules/get-configs.ps1
+    Add-PodeSchedule -Name 'get-routes' -Cron '@hourly'  -FilePath ./schedules/get-routes.ps1
+    Add-PodeSchedule -Name 'new-routes' -Cron '@hourly' -FilePath ./schedules/new-routes.ps1
+    Add-PodeSchedule -Name 'remove-routes' -Cron '@hourly' -FilePath ./schedules/remove-routes.ps1
     
 }
