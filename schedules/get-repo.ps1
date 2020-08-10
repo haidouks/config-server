@@ -22,7 +22,8 @@
         }
         else {
             Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Starting to clone $env:repo to: $repoPath"
-            git clone $env:repo $repoPath
+            git clone $env:repo $repoPath --quiet
+            $exitCode = $LASTEXITCODE
             if ($LASTEXITCODE) { 
                 Throw "$(Get-Date -Format "yyyyMMddHHmmssfff") Unable to clone repo: $($env:repo), exit code: $LASTEXITCODE" 
             }
