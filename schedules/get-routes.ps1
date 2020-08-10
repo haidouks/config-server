@@ -6,7 +6,8 @@
     $VerbosePreference = $env:VerbosePreference ? $env:VerbosePreference : "SilentlyContinue"
     
     $fileName = "get-routes"
-    $stateFile = "./state.json"
+    
+    $stateFile = Join-Path -Path (Get-PodeServerPath)-ChildPath "configs/state.json"
     
     try {
         function Get-ConfigRoutes {
