@@ -40,6 +40,7 @@
             Save-PodeState -Path  $stateFile 
         }
         Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Saved state to $stateFile"
+        Invoke-PodeSchedule -Name 'get-routes'
     }
     catch {
         $exception = $($PSItem | select-object * |Format-Custom -Property * -Depth 1 | Out-String)
