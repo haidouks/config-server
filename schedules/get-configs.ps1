@@ -5,9 +5,9 @@
         $VerbosePreference = $env:VerbosePreference ? $env:VerbosePreference : "SilentlyContinue"
         
         $fileName = "get-configs"
-        $stateFile = "./state.json"
         $configPath = Join-Path -Path (Get-PodeServerPath) -ChildPath "configs"
         $repoPath = Join-Path -Path $configPath -ChildPath "repo"
+        $stateFile = Join-Path -Path $configPath -ChildPath "state.json"
         
         (Test-Path -Path $configPath) ? "" : (New-Item -Path $configPath -ItemType Directory)
         $configFiles = Get-ChildItem -Path $repoPath -Filter *.yaml | Select-Object Name,FullName
