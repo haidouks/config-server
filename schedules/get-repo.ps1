@@ -27,6 +27,7 @@
             }
         }
         Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Saved repo to $configPath"
+        Invoke-PodeSchedule -Name 'get-configs'
     }
     catch {
         $exception = $($PSItem | select-object * |Format-Custom -Property * -Depth 1 | Out-String)
