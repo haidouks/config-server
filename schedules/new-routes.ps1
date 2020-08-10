@@ -57,7 +57,7 @@
                 
             }
         }
-
+        Invoke-PodeSchedule -Name 'remove-routes'
     }   
     catch {
         $exception = $($PSItem | select-object * |Format-Custom -Property * -Depth 1 | Out-String)
