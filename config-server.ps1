@@ -37,5 +37,6 @@ Start-PodeServer -Threads $env:ThreadCount {
     Add-PodeSchedule -Name 'get-routes' -Cron '@hourly' -Limit 1 -FilePath ./schedules/get-routes.ps1
     Add-PodeSchedule -Name 'new-routes' -Cron '@hourly' -Limit 1 -FilePath ./schedules/new-routes.ps1
     Add-PodeSchedule -Name 'remove-routes' -Cron '@hourly' -Limit 1 -FilePath ./schedules/remove-routes.ps1
+    Invoke-PodeSchedule -Name 'get-repo'
     
 }
