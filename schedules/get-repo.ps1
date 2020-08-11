@@ -29,11 +29,14 @@
             }
 
         }
-        Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Saved repo to $configPath"
-        Invoke-PodeSchedule -Name 'get-configs'
+        Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Saved repo to $configPath"   
     }
     catch {
         $exception = $($PSItem | select-object * | Format-Custom -Property * -Depth 1 | Out-String)
         Write-Warning -Message "$fileName __ $exception"
+    }
+    finally {
+        Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") $fileName __ Invoking get configs" 
+        Invoke-PodeSchedule -Name 'get-configs'
     }
 }
