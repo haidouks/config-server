@@ -102,5 +102,5 @@ docker run -d -p 8085:8085 \
 ```
 
 ## Roadmap
-* Just in time synchronizer
+* Just in time synchronizer -> DONE
 * Configure cache capacity and policy
