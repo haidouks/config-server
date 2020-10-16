@@ -8,5 +8,6 @@ RUN chown -R pwshuser /root/.local/share/powershell /usr/src/app/
 SHELL ["pwsh", "-command"]
 RUN (Get-Content -Path /usr/src/app/config.json | ConvertFrom-Json).requiredModules | ForEach-Object { Install-Module $_.Name -RequiredVersion $_.Version -Force -Scope AllUsers}
 USER pwshuser
+RUN Set-PSReadLineOption -HistorySaveStyle SaveNothing
 WORKDIR /usr/src/app
 CMD ./config-server.ps1
