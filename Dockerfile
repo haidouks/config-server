@@ -3,7 +3,7 @@ COPY . /usr/src/app/
 RUN apk add --no-cache git
 RUN git config --global http.sslVerify false
 RUN addgroup -S appgroup && adduser -S pwshuser -G appgroup
-RUN chown pwshuser '~/.local/share/powershell'
+RUN chown -R pwshuser '~/.local/share/powershell'
 USER pwshuser
 RUN pwsh -c '$VerbosePreference = "Continue"; $config = Get-Content -Path /usr/src/app/config.json | ConvertFrom-Json; $config.requiredModules | ForEach-Object { Install-Module $_.Name -RequiredVersion $_.Version -Force -Scope CurrentUser}'
 EXPOSE 8085
