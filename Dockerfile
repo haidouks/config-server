@@ -4,8 +4,7 @@ EXPOSE 8085
 RUN apk add --no-cache git
 RUN git config --global http.sslVerify false
 # RUN addgroup -S appgroup && adduser -S pwshuser -G appgroup
-# RUN chgrp -R 0 /root/.local/share/powershell /usr/src/app/ && \
-#    chmod -R g+rwX /root/.local/share/powershell /usr/src/app/
+RUN chgrp -R 0 /usr/src/app/ && chmod -R g+rwX /usr/src/app/
 #RUN chown -R pwshuser /root/.local/share/powershell /usr/src/app/
 SHELL ["pwsh", "-command"]
 RUN Set-PSReadLineOption -HistorySaveStyle SaveNothing
