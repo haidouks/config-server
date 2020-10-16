@@ -14,6 +14,7 @@ ForEach ($module in $config.requiredModules) {
     if($null -eq $existingModule) {
         Write-Verbose -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") Installing module:$($module.Name) version:$($module.Version) from $($module.Repository)"
         Install-Module -Name $module.Name -RequiredVersion $module.Version -Force -AllowClobber -AllowPrerelease -Repository $module.Repository -Scope CurrentUser
+        Import-Module -Name $module.Name
     }
 }
 #endregion
