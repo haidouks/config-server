@@ -4,7 +4,9 @@ EXPOSE 8085
 RUN apk add --no-cache git
 RUN git config --global http.sslVerify false
 RUN addgroup -S appgroup && adduser -S pwshuser -G appgroup
-RUN chown -R pwshuser /root/.local/share/powershell /usr/src/app/
+RUN chgrp -R 0 /root/.local/share/powershell /usr/src/app/ && \
+    chmod -R g+rwX /root/.local/share/powershell /usr/src/app/
+#RUN chown -R pwshuser /root/.local/share/powershell /usr/src/app/
 SHELL ["pwsh", "-command"]
 RUN (Get-Content -Path /usr/src/app/config.json | ConvertFrom-Json).requiredModules | ForEach-Object { Install-Module $_.Name -RequiredVersion $_.Version -Force -Scope AllUsers}
 USER pwshuser
