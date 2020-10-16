@@ -5,8 +5,8 @@ RUN apk add --no-cache git
 RUN git config --global http.sslVerify false
 RUN addgroup -S appgroup && adduser -S pwshuser -G appgroup
 RUN chown -R pwshuser /root/.local/share/powershell /usr/src/app/
-USER pwshuser
 SHELL ["pwsh", "-command"]
-RUN (Get-Content -Path /usr/src/app/config.json | ConvertFrom-Json).requiredModules | ForEach-Object { Install-Module $_.Name -RequiredVersion $_.Version -Force}
+RUN (Get-Content -Path /usr/src/app/config.json | ConvertFrom-Json).requiredModules | ForEach-Object { Install-Module $_.Name -RequiredVersion $_.Version -Force -Scope AllUsers}
+USER pwshuser
 WORKDIR /usr/src/app
 CMD ./config-server.ps1
