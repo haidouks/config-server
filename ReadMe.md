@@ -1,4 +1,5 @@
 ﻿# Config Server
+[![Docker Pulls](https://img.shields.io/docker/pulls/cnsn/config-server.svg)](https://hub.docker.com/r/cnsn/config-server)
 
 ## What is Config Server?
 Config Server is a Cross-Platform key/value store which dynamically converts yaml files into rest services. 
