@@ -1,0 +1,39 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: config-store
+  namespace: config-tools
+  labels:
+    app: config-store
+    app.kubernetes.io/component: config-store
+    app.kubernetes.io/instance: config-store
+    app.kubernetes.io/part-of: config-store
+spec:
+  triggers:
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+          - config-store
+        from:
+          kind: ImageStreamTag
+          namespace: config-tools
+          name: 'config-store:latest'
+  selector:
+    app: config-store
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: config-store
+    spec:
+      containers:
+        - name: config-store
+          image: config-store:latest
+          ports:
+            - containerPort: 8080
+          env:
+          - name: PodePort
+            value: '8080'
+          - name: VerbosePreference
+            value: Continue

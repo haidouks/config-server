@@ -1,0 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: config-store
+  namespace: config-tools
+  labels:
+    app: config-store
+spec:
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: config-store
+    deploymentconfig: config-store
+  type: ClusterIP

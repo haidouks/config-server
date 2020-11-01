@@ -1,0 +1,23 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: config-store-build
+  namespace: config-tools
+  labels:
+    name: config-store-build
+spec:
+  triggers:
+    - type: GitHub
+      github:
+        secret: cnsn
+    - type: ConfigChange
+  strategy:
+   type: Docker
+  source:
+    type: Git
+    git:
+      uri: 'https://github.com/haidouks/config-server.git'
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'config-store:latest'
