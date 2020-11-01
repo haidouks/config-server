@@ -5,6 +5,7 @@ RUN apk add --no-cache git
 RUN git config --global http.sslVerify false
 # RUN addgroup -S appgroup && adduser -S pwshuser -G appgroup
 RUN chgrp -R 0 /usr/src/app/ && chmod -R g+rwX /usr/src/app/
+RUN chmod +x /usr/src/app/config-server.ps1
 #RUN chown -R pwshuser /root/.local/share/powershell /usr/src/app/
 SHELL ["pwsh", "-command"]
 RUN Set-PSReadLineOption -HistorySaveStyle SaveNothing
