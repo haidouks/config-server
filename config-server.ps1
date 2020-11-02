@@ -30,7 +30,7 @@ Start-PodeServer -Threads $env:ThreadCount {
     $configPath = Join-Path -Path (Get-PodeServerPath) -ChildPath "configs"
     (Test-Path -Path $configPath) ? "" : (New-Item -Path $configPath -ItemType Directory)
     $stateFile = Join-Path -Path $configPath -ChildPath "state.json"
-    Restore-PodeState -Path $stateFile
+    (Test-Path -Path $stateFile ) ? (Restore-PodeState -Path $stateFile) : (Write-Warning -Message "$(Get-Date -Format "yyyyMMddHHmmssfff") Unable to load state to memory")
     
     Add-PodeSchedule -Name 'set-auth' -Cron '@minutely' -Limit 1 -FilePath ./schedules/set-auth.ps1 -OnStart
     Add-PodeSchedule -Name 'get-repo' -Cron '@minutely'  -FilePath ./schedules/get-repo.ps1 -OnStart
