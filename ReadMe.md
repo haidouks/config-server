@@ -84,6 +84,12 @@ Example 1: Quick start
 ``` Docker
 docker run -d -p 8085:8085 cnsn/config-server:latest
 ```
+Now browse `http://localhost:8085/test/myKey`: 
+* `test` is the name of yaml file in default source repository: `https://github.com/haidouks/configs`
+* `myKey` is a key in test.yaml
+
+Response should see something like `{"value":"world1"}` which is the value of key `myKey`
+
 Example 2: Configure variables
 ``` Docker
 docker run -d -p 8085:8085 \
